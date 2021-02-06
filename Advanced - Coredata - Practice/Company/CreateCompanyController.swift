@@ -15,7 +15,7 @@ protocol CreateCompanyControllerDelegate {
 
 class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate , UINavigationControllerDelegate {
     
-    var delegate: CompaniesViewController?
+    var delegate: CreateCompanyControllerDelegate?
     var company: Company? {
         didSet{
             if let imageData = company?.imageData {
@@ -40,12 +40,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         textfield.translatesAutoresizingMaskIntoConstraints = false
         return textfield
     }()
-    let lightBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.lightBlue
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+
     let datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
@@ -99,15 +94,12 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     fileprivate func setupUI() {
         view.backgroundColor = UIColor.darkBlue
         navigationController?.view.backgroundColor = .lightRed
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        setupCancelButton()
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
         
-        view.addSubview(lightBackgroundView)
-        lightBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        lightBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        lightBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        lightBackgroundView.heightAnchor.constraint(equalToConstant: 210).isActive = true
-        
+        let lightBackgroundView = setupLightBlueBackgroundView(height: 210)
+     
         view.addSubview(imageView)
         imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
@@ -133,10 +125,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         datePicker.bottomAnchor.constraint(equalTo: lightBackgroundView.bottomAnchor).isActive = true
         
     }
-    
-    @objc fileprivate func handleCancel() {
-        dismiss(animated: true, completion: nil)
-    }
+  
     
     @objc fileprivate func handleSave() {
         if company == nil{
@@ -194,6 +183,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
             print(err)
         }
     }
+    
     
 }
 
